@@ -1,84 +1,59 @@
-TESTES UNITARIOS EMAIL : 
+Teste Unitário para EmailAwsConverter
+	Objetivo: 
+		-->Garantir que o método convert da classe EmailAwsConverter converta corretamente um objeto EmailDTO em um objeto EmailAwsDTO.
 
-testEmailConstructor: Verifica se o construtor parametrizado define corretamente todos os campos.
-
-testSettersAndGetters: Verifica se os métodos setters e getters funcionam corretamente para todos os campos.
-
-testDefaultConstructor: Verifica se o construtor padrão inicializa os campos como null.
-
-TESTES UNITARIOS EMAIL AWS DTO:
-
-testEmailAwsDTOConstructor:
-
-Verifica se o construtor parametrizado define corretamente todos os campos.
-Usa o construtor da classe EmailAwsDTO para criar um objeto e, em seguida, verifica se os valores dos campos estão corretos usando os métodos getters.
-
-testSettersAndGetters:
-
-Cria um objeto EmailAwsDTO com valores iniciais vazios.
-Usa os métodos setters para definir novos valores para os campos e, em seguida, verifica se os valores foram corretamente atribuídos usando os métodos getters.
-
-TESTES UNITARIOS EMAIL OCI DTO:
-
-testEmailOciDTOConstructor:
-
-Verifica se o construtor parametrizado define corretamente todos os campos.
-Usa o construtor da classe EmailOciDTO para criar um objeto e, em seguida, verifica se os valores dos campos estão corretos usando os métodos getters.
-
-testSettersAndGetters:
-
-Cria um objeto EmailOciDTO com valores iniciais vazios.
-Usa os métodos setters para definir novos valores para os campos e, em seguida, verifica se os valores foram corretamente atribuídos usando os métodos getters.
-
-TESTES UNITARIOS EMAIL RESOURCE:
-
-testFind:
-
-Verifica se o endpoint /emails/{codigo} retorna um email corretamente quando o email é encontrado.
-
-testFindNotFound:
-
-Verifica se o endpoint /emails/{codigo} retorna um erro 400 quando o email não é encontrado.
-
-testFindAll:
-
-Verifica se o endpoint /emails retorna todos os emails corretamente.
-
-testInsert:
-
-Verifica se o endpoint POST /emails insere um novo email corretamente e retorna o status 201.
-
-testInsertAws:
-
-Verifica se o endpoint POST /emails/salvar-aws insere um novo email corretamente e retorna o status 201.
-
-testInsertOci:
-
-Verifica se o endpoint POST /emails/salvar-oci insere um novo email corretamente e retorna o status 201.
+	Descrição:
+		-->Criamos um objeto EmailDTO com dados de exemplo.
+		-->Instanciamos um EmailAwsConverter.
+		-->Chamamos o método convert para converter o EmailDTO.
+		-->Verificamos se todos os campos do EmailAwsDTO resultante são iguais aos campos correspondentes do EmailDTO de entrada.
 
 
-TESTES UNITARIOS EMAIL SERVICE :
+Teste Unitário para EmailOciConverter
+	Objetivo: 
+		-->Garantir que o método convert da classe EmailOciConverter converta corretamente um objeto EmailDTO em um objeto EmailOciDTO.
+	Descrição:
+		-->Criamos um objeto EmailDTO com dados de exemplo.
+		-->Instanciamos um EmailOciConverter.
+		-->Chamamos o método convert para converter o EmailDTO.
+		-->Verificamos se todos os campos do EmailOciDTO resultante são iguais aos campos correspondentes do EmailDTO de entrada.
 
-testFind:
 
-Verifica se o método find retorna um email corretamente quando o email é encontrado no repositório.
+Teste Unitário para Verificar Campo subject em EmailOciDTO
+	Objetivo: 
+		-->Garantir que a classe EmailOciDTO possa armazenar um campo subject com mais de 120 caracteres.
+	Descrição:
+		-->Criamos um objeto EmailDTO com um assunto longo (mais de 120 caracteres).
+		-->Instanciamos um EmailOciConverter.
+		-->Chamamos o método convert para converter o EmailDTO.
+		-->Verificamos se todos os campos do EmailOciDTO resultante são iguais aos campos correspondentes do EmailDTO de entrada, incluindo o campo subject.
 
-testFindNotFound:
 
-Verifica se o método find lança uma exceção ObjectNotFoundException quando o email não é encontrado no repositório.
+Teste Unitário para EmailService
+	Objetivo: 
+		-->Verificar se o método sendEmail do EmailService funciona corretamente, incluindo a integração com diferentes serviços de e-mail (AWS, OCI) e a validação dos objetos DTO.
+	Descrição:
+		-->Para cada tipo de integração (AWS, OCI):
+		-->Configuramos mocks para simular o comportamento dos objetos relacionados (conversores, validador, logger).
+		-->Criamos um objeto EmailDTO com dados de exemplo.
+		-->Chamamos o método sendEmail do EmailService com o EmailDTO.
+		-->Verificamos se a conversão para o tipo correto de DTO é feita.
+		-->Verificamos se a validação do DTO é feita corretamente.
+		-->Verificamos se o logger é chamado corretamente.
+		-->Para uma integração não suportada:
+		-->Configuramos um mock para simular o comportamento do objeto relacionado.
+		-->Criamos um objeto EmailDTO com dados de exemplo.
+		-->Chamamos o método sendEmail do EmailService com o EmailDTO.
+		-->Verificamos se uma IllegalArgumentException é lançada com a mensagem apropriada.
 
-testFindAll:
 
-Verifica se o método findAll retorna todos os emails corretamente.
-
-testInsertEmailDTO:
-
-Verifica se o método insert com um EmailDTO insere um novo email corretamente e retorna o email salvo.
-
-testInsertEmailAwsDTO:
-
-Verifica se o método insert com um EmailAwsDTO insere um novo email corretamente e retorna o email salvo.
-
-testInsertEmailOciDTO:
-
-Verifica se o método insert com um EmailOciDTO insere um novo email corretamente e retorna o email salvo.
+Teste Unitário para EmailController
+	Objetivo: 
+		-->Garantir que o endpoint /emails/send-email do EmailController funcione corretamente, incluindo o tratamento de exceções.
+	Descrição:
+		-->Configuramos mocks para simular o comportamento do serviço de e-mail.
+		-->Criamos um objeto EmailDTO com dados de exemplo.
+		-->Chamamos o endpoint /emails/send-email com o EmailDTO.
+		-->Verificamos se o serviço de e-mail é chamado corretamente.
+		-->Verificamos se o status de resposta é 204 No Content em caso de sucesso.
+		-->Verificamos se o status de resposta é 400 Bad Request em caso de falha (exceção lançada pelo serviço de e-mail).
