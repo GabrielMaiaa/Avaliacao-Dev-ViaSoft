@@ -19,12 +19,8 @@ public class EmailController {
 
     @PostMapping(value = "/send-email")
     public ResponseEntity<?> sendEmail(@RequestBody EmailDTO emailDTO) throws JsonProcessingException {
-        try {
-            emailService.sendEmail(emailDTO);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(400).build();
-        }
+        emailService.sendEmail(emailDTO);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

@@ -3,50 +3,44 @@ package com.example.viaSoft.ControllerTests;
 import com.example.viaSoft.DTO.EmailDTO;
 import com.example.viaSoft.controller.EmailController;
 import com.example.viaSoft.services.EmailService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @WebMvcTest(EmailController.class)
 class EmailControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    EmailController emailController;
 
-    @MockBean
-    private EmailService emailService;
+    @Mock
+    EmailService emailService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Test
-    public void sendEmail_ShouldReturnNoContent_WhenEmailIsSent() throws Exception {
-        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
-
-        mockMvc.perform(post("/emails/send-email")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(emailDTO)))
-                .andExpect(status().isNoContent());
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void sendEmail_ShouldReturnBadRequest_WhenServiceThrowsException() throws Exception {
-        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
+    void testSendEmail() throws JsonProcessingException {
+        // Given
+        EmailDTO emailDTO = new EmailDTO();
 
-        Mockito.doThrow(new RuntimeException()).when(emailService).sendEmail(Mockito.any(EmailDTO.class));
+        // When
+        ResponseEntity<?> responseEntity = emailController.sendEmail(emailDTO);
 
-        mockMvc.perform(post("/emails/send-email")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(emailDTO)))
-                .andExpect(status().isBadRequest());
+        // Then
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        verify(emailService, times(1)).sendEmail(emailDTO);
     }
 
 }

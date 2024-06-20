@@ -15,6 +15,8 @@ public class EmailAwsDTO {
     @Size(max = 256, message = "Conteúdo do e-mail. Max: 256 caracteres")
     private String content;
 
+    public EmailAwsDTO(){}
+
     public EmailAwsDTO( String recipient, String recipientName, String sender, String subject, String content) {
         this.recipient = recipient;
         this.recipientName = recipientName;

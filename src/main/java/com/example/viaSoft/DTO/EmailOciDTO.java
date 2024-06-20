@@ -15,6 +15,8 @@ public class EmailOciDTO {
     @Size(max = 45, message = "Conteúdo do e-mail. Max: 250 caracteres")
     private String body;
 
+    public EmailOciDTO(){}
+
     public EmailOciDTO(String recipientEmail, String recipientName, String senderEmail, String subject, String body) {
         this.recipientEmail = recipientEmail;
         this.recipientName = recipientName;

@@ -8,6 +8,8 @@ public class EmailDTO {
     private String subject;
     private String content;
 
+    public EmailDTO(){}
+
     public EmailDTO(String recipient, String recipientName, String sender, String subject, String content) {
         this.recipient = recipient;
         this.recipientName = recipientName;

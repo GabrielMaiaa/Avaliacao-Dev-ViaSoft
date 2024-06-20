@@ -1,28 +1,31 @@
 Teste Unitário para EmailService
-	Objetivo: 
-		-->Verificar se o método sendEmail do EmailService funciona corretamente, incluindo a integração com diferentes serviços de e-mail (AWS, OCI) e a validação dos objetos DTO.
-	Descrição:
-		-->Para cada tipo de integração (AWS, OCI):
-		-->Configuramos mocks para simular o comportamento dos objetos relacionados (conversores, validador, logger).
-		-->Criamos um objeto EmailDTO com dados de exemplo.
-		-->Chamamos o método sendEmail do EmailService com o EmailDTO.
-		-->Verificamos se a conversão para o tipo correto de DTO é feita.
-		-->Verificamos se a validação do DTO é feita corretamente.
-		-->Verificamos se o logger é chamado corretamente.
-		-->Para uma integração não suportada:
-		-->Configuramos um mock para simular o comportamento do objeto relacionado.
-		-->Criamos um objeto EmailDTO com dados de exemplo.
-		-->Chamamos o método sendEmail do EmailService com o EmailDTO.
-		-->Verificamos se uma IllegalArgumentException é lançada com a mensagem apropriada.
+
+	--> testSendEmailWithAwsIntegration: 
+		Testa se o método sendEmail lida corretamente com a integração AWS. 
+		Configura a integração como AWS, verifica se a conversão para EmailAwsDTO 
+		é chamada e se o método validate de EmailAwsValidator é invocado uma vez.
+
+	--> testSendEmailWithOciIntegration: 
+		Testa se o método sendEmail lida corretamente com a integração OCI. 
+		Configura a integração como OCI, verifica se a conversão para EmailOciDTO é chamada
+		e se o método validate de EmailOciValidator é invocado uma vez.
+
+	--> testSendEmailWithUnsupportedIntegration: 
+		Testa se o método sendEmail lida corretamente com uma integração não suportada. 
+		Configura a integração como não suportada e verifica se uma exceção IllegalArgumentException
+		é lançada ao tentar enviar um email.
 
 
 Teste Unitário para EmailController
-	Objetivo: 
-		-->Garantir que o endpoint /emails/send-email do EmailController funcione corretamente, incluindo o tratamento de exceções.
-	Descrição:
-		-->Configuramos mocks para simular o comportamento do serviço de e-mail.
-		-->Criamos um objeto EmailDTO com dados de exemplo.
-		-->Chamamos o endpoint /emails/send-email com o EmailDTO.
-		-->Verificamos se o serviço de e-mail é chamado corretamente.
-		-->Verificamos se o status de resposta é 204 No Content em caso de sucesso.
-		-->Verificamos se o status de resposta é 400 Bad Request em caso de falha (exceção lançada pelo serviço de e-mail).
+	
+	--> Configuração do Teste:
+		O teste é anotado com @WebMvcTest(EmailController.class) para carregar apenas a camada web do controlador EmailController.
+		EmailController é injetado (@InjectMocks) e EmailService é mockado (@Mock).
+		MockitoAnnotations.initMocks(this) é usado para inicializar os mocks antes de cada teste.
+
+	--> Teste do Método sendEmail:
+
+		Um objeto EmailDTO é criado para simular um e-mail a ser enviado.
+		O método sendEmail do controlador é invocado com este objeto.
+		É verificado se o código de status da resposta é NO_CONTENT, indicando que o e-mail foi enviado com sucesso.
+		Verifica se o método sendEmail de EmailService foi chamado uma vez com o objeto EmailDTO.

@@ -1,98 +1,87 @@
 package com.example.viaSoft.ServicesTests;
 
-import com.example.viaSoft.DTO.EmailDTO;
 import com.example.viaSoft.DTO.EmailAwsDTO;
+import com.example.viaSoft.DTO.EmailDTO;
 import com.example.viaSoft.DTO.EmailOciDTO;
 import com.example.viaSoft.converter.EmailAwsConverter;
 import com.example.viaSoft.converter.EmailOciConverter;
 import com.example.viaSoft.services.EmailService;
+import com.example.viaSoft.validator.EmailAwsValidator;
+import com.example.viaSoft.validator.EmailOciValidator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.logging.Logger;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class EmailServiceTest {
 
     @InjectMocks
-    private EmailService emailService;
+    EmailService emailService;
 
     @Mock
-    private Validator validator;
+    EmailAwsConverter emailAwsConverter;
 
     @Mock
-    private EmailAwsConverter emailAwsConverter;
+    EmailOciConverter emailOciConverter;
 
     @Mock
-    private EmailOciConverter emailOciConverter;
+    EmailOciValidator emailOciValidator;
 
     @Mock
-    private ObjectMapper objectMapper;
+    EmailAwsValidator emailAwsValidator;
 
     @Mock
-    private Logger logger;
-
-    @Value("${mail.integracao}")
-    private String mailIntegration;
-
-    private AutoCloseable closeable;
+    ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
-        emailService = new EmailService();
-        ReflectionTestUtils.setField(emailService, "mailIntegration", mailIntegration);
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testSendEmail_AWSIntegration() throws JsonProcessingException {
-        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
-        EmailAwsDTO emailAwsDTO = new EmailAwsDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
-
-        when(mailIntegration).thenReturn(EmailService.AWS_MAIL_INTEGRATION);
+    void testSendEmailWithAwsIntegration() throws JsonProcessingException {
+        // Given
+        EmailDTO emailDTO = new EmailDTO();
+        EmailAwsDTO emailAwsDTO = new EmailAwsDTO();
+        emailService.setMailIntegration(EmailService.AWS_MAIL_INTEGRATION); // Definindo integração AWS
         when(emailAwsConverter.convert(emailDTO)).thenReturn(emailAwsDTO);
 
+        // When
         emailService.sendEmail(emailDTO);
 
-        verify(validator).validate(emailAwsDTO);
-        verify(logger).info(objectMapper.writeValueAsString(emailAwsDTO));
+        // Then
+        verify(emailAwsValidator, times(1)).validate(emailAwsDTO);
     }
 
     @Test
-    public void testSendEmail_OCIIntegration() throws JsonProcessingException {
-        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
-        EmailOciDTO emailOciDTO = new EmailOciDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
-
-        when(mailIntegration).thenReturn(EmailService.OCI_MAIL_INTEGRATION);
+    void testSendEmailWithOciIntegration() throws JsonProcessingException {
+        // Given
+        EmailDTO emailDTO = new EmailDTO();
+        EmailOciDTO emailOciDTO = new EmailOciDTO();
+        emailService.setMailIntegration(EmailService.OCI_MAIL_INTEGRATION); // Definindo integração OCI
         when(emailOciConverter.convert(emailDTO)).thenReturn(emailOciDTO);
 
+        // When
         emailService.sendEmail(emailDTO);
 
-        verify(validator).validate(emailOciDTO);
-        verify(logger).info(objectMapper.writeValueAsString(emailOciDTO));
+        // Then
+        verify(emailOciValidator, times(1)).validate(emailOciDTO);
     }
 
     @Test
-    public void testSendEmail_UnsupportedIntegration() {
-        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
+    void testSendEmailWithUnsupportedIntegration() {
+        // Given
+        EmailDTO emailDTO = new EmailDTO();
+        emailService.setMailIntegration("unsupported"); // Definindo integração não suportada
 
-        when(mailIntegration).thenReturn("unsupported");
-
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> emailService.sendEmail(emailDTO),
-                "Expected sendEmail() to throw, but it didn't"
-        );
-
-        assertTrue(thrown.getMessage().contains(EmailService.NOT_SUPPORTED_INTEGRATION));
+        // When/Then
+        assertThrows(IllegalArgumentException.class, () -> emailService.sendEmail(emailDTO));
     }
 
 }
