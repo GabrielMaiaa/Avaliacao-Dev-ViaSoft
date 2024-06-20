@@ -1,31 +1,19 @@
-Teste Unitário para EmailService
-
-	--> testSendEmailWithAwsIntegration: 
-		Testa se o método sendEmail lida corretamente com a integração AWS. 
-		Configura a integração como AWS, verifica se a conversão para EmailAwsDTO 
-		é chamada e se o método validate de EmailAwsValidator é invocado uma vez.
-
-	--> testSendEmailWithOciIntegration: 
-		Testa se o método sendEmail lida corretamente com a integração OCI. 
-		Configura a integração como OCI, verifica se a conversão para EmailOciDTO é chamada
-		e se o método validate de EmailOciValidator é invocado uma vez.
-
-	--> testSendEmailWithUnsupportedIntegration: 
-		Testa se o método sendEmail lida corretamente com uma integração não suportada. 
-		Configura a integração como não suportada e verifica se uma exceção IllegalArgumentException
-		é lançada ao tentar enviar um email.
-
-
 Teste Unitário para EmailController
 	
-	--> Configuração do Teste:
-		O teste é anotado com @WebMvcTest(EmailController.class) para carregar apenas a camada web do controlador EmailController.
-		EmailController é injetado (@InjectMocks) e EmailService é mockado (@Mock).
-		MockitoAnnotations.initMocks(this) é usado para inicializar os mocks antes de cada teste.
+        --> Configuração dos Testes:
+            A classe EmailControllerTest está anotada com várias anotações para configurar o ambiente de teste.
+            Por exemplo, @ExtendWith(SpringExtension.class) e @SpringBootTest(webEnvironment = RANDOM_PORT) são usadas para configurar o ambiente Spring.
 
-	--> Teste do Método sendEmail:
+        --> Inicialização de Dependências:
+            Duas dependências são injetadas usando a anotação @Autowired: EmailService e EmailController.
+            Isso é necessário para simular a execução real da aplicação.
 
-		Um objeto EmailDTO é criado para simular um e-mail a ser enviado.
-		O método sendEmail do controlador é invocado com este objeto.
-		É verificado se o código de status da resposta é NO_CONTENT, indicando que o e-mail foi enviado com sucesso.
-		Verifica se o método sendEmail de EmailService foi chamado uma vez com o objeto EmailDTO.
+        --> Teste de Envio de E-mail Bem-Sucedido:
+            O método sendEmail_succeeds() testa se o envio de um e-mail é bem-sucedido.
+            Ele cria um objeto EmailDTO com detalhes simulados do e-mail e chama o método sendEmail() do controlador de e-mail.
+            Em seguida, verifica se a resposta HTTP é HttpStatus.NO_CONTENT, o que indica que o e-mail foi enviado com sucesso.
+
+        --> Teste de Exceção de Argumento Inválido:
+            O método sendEmail_throwsIllegalArgumentException() testa se uma exceção IllegalArgumentException é lançada quando
+            o e-mail contém um endereço de destinatário inválido (muito longo). Ele cria um objeto EmailDTO com um endereço de e-mail
+            muito longo e verifica se uma exceção é lançada ao chamar o método sendEmail() do controlador de e-mail.

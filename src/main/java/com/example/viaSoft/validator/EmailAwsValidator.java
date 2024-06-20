@@ -3,9 +3,11 @@ package com.example.viaSoft.validator;
 import com.example.viaSoft.DTO.EmailAwsDTO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+@Component
 public class EmailAwsValidator implements EmailValidator<EmailAwsDTO> {
 
     private final Validator validator;

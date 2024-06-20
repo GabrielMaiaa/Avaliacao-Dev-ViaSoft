@@ -9,7 +9,6 @@ import com.example.viaSoft.validator.EmailAwsValidator;
 import com.example.viaSoft.validator.EmailOciValidator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,6 @@ public class EmailService {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     public void sendEmail(EmailDTO emailDTO) throws JsonProcessingException {
         if (mailIntegration.equalsIgnoreCase(AWS_MAIL_INTEGRATION)) {
             EmailAwsDTO emailAwsDTO = emailAwsConverter.convert(emailDTO);
@@ -58,11 +56,6 @@ public class EmailService {
     private void processEmailOci(EmailOciDTO email) throws JsonProcessingException {
         emailOciValidator.validate(email);
         logger.info(objectMapper.writeValueAsString(email));
-    }
-
-    // Método para definir a integração do e-mail
-    public void setMailIntegration(String integration) {
-        this.mailIntegration = integration;
     }
 
 }
