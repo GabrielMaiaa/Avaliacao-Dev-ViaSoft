@@ -1,15 +1,18 @@
 package com.example.viaSoft.DTO;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.Size;
 
 public class EmailAwsDTO {
 
+    @Size(max = 45, message = "E-mail destinatário: Max: 45 caracteres")
     private String recipient;
+    @Size(max = 60, message = "Nome destinatário: Max: 60 caracteres")
     private String recipientName;
+    @Size(max = 45, message = "E-mail remetente: Max: 45 caracteres")
     private String sender;
+    @Size(max = 120, message = "Assunto do e-mail. Max: 120 caracteres")
     private String subject;
+    @Size(max = 256, message = "Conteúdo do e-mail. Max: 256 caracteres")
     private String content;
 
     public EmailAwsDTO( String recipient, String recipientName, String sender, String subject, String content) {

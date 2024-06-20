@@ -3,59 +3,49 @@ package com.example.viaSoft.services;
 import com.example.viaSoft.DTO.EmailAwsDTO;
 import com.example.viaSoft.DTO.EmailDTO;
 import com.example.viaSoft.DTO.EmailOciDTO;
-import com.example.viaSoft.domain.Email;
-import com.example.viaSoft.repositories.EmailRepository;
-import com.example.viaSoft.services.exceptions.ObjectNotFoundException;
+import com.example.viaSoft.converter.EmailAwsConverter;
+import com.example.viaSoft.converter.EmailOciConverter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class EmailService {
 
+    private static final Logger logger = Logger.getLogger(EmailService.class.getName());
+    public static final String AWS_MAIL_INTEGRATION = "aws";
+    public static final String OCI_MAIL_INTEGRATION = "oci";
+    public static final String NOT_SUPPORTED_INTEGRATION = "Integração não suportada: ";
+
+    @Value("${mail.integracao}")
+    private String mailIntegration;
     @Autowired
-    private EmailRepository emailRepository;
+    private Validator validator;
+    @Autowired
+    private EmailAwsConverter emailAwsConverter;
+    @Autowired
+    private EmailOciConverter emailOciConverter;
 
-    public Email find(Integer codigo) {
-        Optional<Email> objeto = emailRepository.findById(codigo);
-        return objeto.orElseThrow(() -> new ObjectNotFoundException(
-                "Email não enviado! Id: " + codigo + "."));
-    }
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    public List<Email> findAll() {
-        return emailRepository.findAll();
-    }
-
-    public Email insert(EmailDTO emailDTO) {
-        Email email = new Email(null,
-                emailDTO.getRecipient(),
-                emailDTO.getRecipientName(),
-                emailDTO.getSender(),
-                emailDTO.getSubject(),
-                emailDTO.getContent());
-        return emailRepository.save(email);
-    }
-
-    public Email insertAws(EmailAwsDTO emailAwsDTO) {
-        Email email = new Email(null,
-                emailAwsDTO.getRecipient(),
-                emailAwsDTO.getRecipientName(),
-                emailAwsDTO.getSender(),
-                emailAwsDTO.getSubject(),
-                emailAwsDTO.getContent());
-        return emailRepository.save(email);
-    }
-
-    public Email insertOci(EmailOciDTO emailOciDTO) {
-        Email email = new Email(null,
-                emailOciDTO.getRecipientEmail(),
-                emailOciDTO.getRecipientName(),
-                emailOciDTO.getSenderEmail(),
-                emailOciDTO.getSubject(),
-                emailOciDTO.getBody());
-        return emailRepository.save(email);
+    public void sendEmail(EmailDTO emailDTO) throws JsonProcessingException {
+        if (mailIntegration.equalsIgnoreCase(AWS_MAIL_INTEGRATION)) {
+            EmailAwsDTO emailAwsDTO = emailAwsConverter.convert(emailDTO);
+            validator.validate(emailAwsDTO);
+            logger.info(objectMapper.writeValueAsString(emailAwsDTO));
+        } else if (mailIntegration.equalsIgnoreCase(OCI_MAIL_INTEGRATION)) {
+            EmailOciDTO emailOciDTO = emailOciConverter.convert(emailDTO);
+            validator.validate(emailOciDTO);
+            logger.info(objectMapper.writeValueAsString(emailOciDTO));
+        } else {
+            throw new IllegalArgumentException(NOT_SUPPORTED_INTEGRATION + mailIntegration);
+        }
     }
 
 }

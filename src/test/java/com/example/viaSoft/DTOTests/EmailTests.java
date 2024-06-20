@@ -1,69 +1,40 @@
 package com.example.viaSoft.DTOTests;
 
-import com.example.viaSoft.domain.Email;
+import com.example.viaSoft.DTO.EmailDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class EmailTests {
 
     @Test
-    void testEmailConstructor() {
-        Integer codigoEmail = 1;
-        String recipient = "recipient@example.com";
-        String recipientName = "Recipient Name";
-        String sender = "sender@example.com";
-        String subject = "Subject";
-        String content = "Content";
+    public void testEmailDTO() {
+        EmailDTO email = new EmailDTO("test@example.com", "Test User", "sender@example.com", "Test Subject", "Test Content");
 
-        Email email = new Email(codigoEmail, recipient, recipientName, sender, subject, content);
-
-        assertEquals(codigoEmail, email.getCodigoEmail());
-        assertEquals(recipient, email.getRecipient());
-        assertEquals(recipientName, email.getRecipientName());
-        assertEquals(sender, email.getSender());
-        assertEquals(subject, email.getSubject());
-        assertEquals(content, email.getContent());
+        assertEquals("test@example.com", email.getRecipient());
+        assertEquals("Test User", email.getRecipientName());
+        assertEquals("sender@example.com", email.getSender());
+        assertEquals("Test Subject", email.getSubject());
+        assertEquals("Test Content", email.getContent());
     }
 
     @Test
-    void testSettersAndGetters() {
-        Email email = new Email();
+    public void testSettersAndGetters() {
+        EmailDTO email = new EmailDTO("", "", "", "", "");
 
-        Integer codigoEmail = 1;
-        email.setCodigoEmail(codigoEmail);
-        assertEquals(codigoEmail, email.getCodigoEmail());
+        email.setRecipient("newrecipient@example.com");
+        assertEquals("newrecipient@example.com", email.getRecipient());
 
-        String recipient = "recipient@example.com";
-        email.setRecipient(recipient);
-        assertEquals(recipient, email.getRecipient());
+        email.setRecipientName("New Recipient");
+        assertEquals("New Recipient", email.getRecipientName());
 
-        String recipientName = "Recipient Name";
-        email.setRecipientName(recipientName);
-        assertEquals(recipientName, email.getRecipientName());
+        email.setSender("newsender@example.com");
+        assertEquals("newsender@example.com", email.getSender());
 
-        String sender = "sender@example.com";
-        email.setSender(sender);
-        assertEquals(sender, email.getSender());
+        email.setSubject("New Subject");
+        assertEquals("New Subject", email.getSubject());
 
-        String subject = "Subject";
-        email.setSubject(subject);
-        assertEquals(subject, email.getSubject());
-
-        String content = "Content";
-        email.setContent(content);
-        assertEquals(content, email.getContent());
-    }
-
-    @Test
-    void testDefaultConstructor() {
-        Email email = new Email();
-        assertNull(email.getCodigoEmail());
-        assertNull(email.getRecipient());
-        assertNull(email.getRecipientName());
-        assertNull(email.getSender());
-        assertNull(email.getSubject());
-        assertNull(email.getContent());
+        email.setContent("New Content");
+        assertEquals("New Content", email.getContent());
     }
 }

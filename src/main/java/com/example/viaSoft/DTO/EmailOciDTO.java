@@ -1,11 +1,18 @@
 package com.example.viaSoft.DTO;
 
+import jakarta.validation.constraints.Size;
+
 public class EmailOciDTO {
 
+    @Size(max = 40, message = "E-mail destinatário: Max: 40 caracteres")
     private String recipientEmail;
+    @Size(max = 50, message = "Nome destinário. Max: 50 caracteres")
     private String recipientName;
+    @Size(max = 40, message = "E-mail remetente. Max: 40 caracteres")
     private String senderEmail;
+    @Size(max = 100, message = "Assunto do e-mail. Max: 100 caracteres")
     private String subject;
+    @Size(max = 45, message = "Conteúdo do e-mail. Max: 250 caracteres")
     private String body;
 
     public EmailOciDTO(String recipientEmail, String recipientName, String senderEmail, String subject, String body) {
