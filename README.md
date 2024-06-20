@@ -15,53 +15,6 @@ Este projeto é uma aplicação REST desenvolvida como parte de um desafio técn
 1. **Envio de E-mail Simples**
 2. **Envio de E-mail via OCI ou AWS**
 
-## Estrutura do Projeto
-
-O projeto inclui um modelo de classe que representa um e-mail, conforme mostrado no diagrama de classes abaixo:
-
-```mermaid
-classDiagram
-   class Email {
-	- Integer codigoEmail
-        - String recipient
-        - String recipientName
-        - String sender
-        - String subject
-        - String content
-        + getters/setters
-    }
-
-class EmailDTO {
-        - String recipient
-        - String recipientName
-        - String sender
-        - String subject
-        - String content
-        + getters/setters
-    }
-
-class EmailAwsDTO {
-        - String recipient
-        - String recipientName
-        - String sender
-        - String subject
-        - String content
-        + getters/setters
-    }
-
-class EmailOciDTO {
-        - String recipient
-        - String recipientName
-        - String sender
-        - String subject
-        - String content
-        + getters/setters
-    }
-
-Email -- EmailDTO
-Email -- EmailAwsDTO
-Email -- EmailOciDTO
-```
 
 ## Configuração
 As configurações para envio de e-mail podem ser ajustadas no arquivo application.properties, permitindo escolher entre o envio via OCI ou AWS.
