@@ -1,5 +1,9 @@
 package com.example.viaSoft.DTO;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class EmailAwsDTO {
 
     private String recipient;
@@ -8,7 +12,7 @@ public class EmailAwsDTO {
     private String subject;
     private String content;
 
-    public EmailAwsDTO(String recipient, String recipientName, String sender, String subject, String content) {
+    public EmailAwsDTO( String recipient, String recipientName, String sender, String subject, String content) {
         this.recipient = recipient;
         this.recipientName = recipientName;
         this.sender = sender;

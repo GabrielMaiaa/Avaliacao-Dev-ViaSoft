@@ -41,29 +41,29 @@ public class EmailResource {
     }
 
     @PostMapping
-    public ResponseEntity<Email> insert(@RequestBody EmailDTO objetoEmailDTO) {
+    public ResponseEntity<Email> insert(@RequestBody EmailDTO emailDTO) {
         try {
-            Email newEmail = emailService.insert(objetoEmailDTO);
+            Email newEmail = emailService.insert(emailDTO);
             return new ResponseEntity<Email>(newEmail, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).build();
         }
     }
 
-    @PostMapping(value = "/salvarAws")
-    public ResponseEntity<Email> insert(@RequestBody EmailAwsDTO objetoEmailAwsDTO) {
+    @PostMapping(value = "/salvar-aws")
+    public ResponseEntity<Email> insert(@RequestBody EmailAwsDTO emailAwsDTO) {
         try {
-            Email newEmail = emailService.insert(objetoEmailAwsDTO);
+            Email newEmail = emailService.insertAws(emailAwsDTO);
             return new ResponseEntity<Email>(newEmail, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).build();
         }
     }
 
-    @PostMapping(value = "/salvarOci")
-    public ResponseEntity<Email> insert(@RequestBody EmailOciDTO objetoEmailOciDTO) {
+    @PostMapping(value = "/salvar-oci")
+    public ResponseEntity<Email> insert(@RequestBody EmailOciDTO emailOciDTO) {
         try {
-            Email newEmail = emailService.insert(objetoEmailOciDTO);
+            Email newEmail = emailService.insertOci(emailOciDTO);
             return new ResponseEntity<Email>(newEmail, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).build();

@@ -38,8 +38,7 @@ public class EmailService {
         return emailRepository.save(email);
     }
 
-    // Email AWS DTO
-    public Email insert(EmailAwsDTO emailAwsDTO) {
+    public Email insertAws(EmailAwsDTO emailAwsDTO) {
         Email email = new Email(null,
                 emailAwsDTO.getRecipient(),
                 emailAwsDTO.getRecipientName(),
@@ -49,8 +48,7 @@ public class EmailService {
         return emailRepository.save(email);
     }
 
-    // Email OCI DTO
-    public Email insert(EmailOciDTO emailOciDTO) {
+    public Email insertOci(EmailOciDTO emailOciDTO) {
         Email email = new Email(null,
                 emailOciDTO.getRecipientEmail(),
                 emailOciDTO.getRecipientName(),

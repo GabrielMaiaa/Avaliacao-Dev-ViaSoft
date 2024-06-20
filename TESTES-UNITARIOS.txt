@@ -1,0 +1,84 @@
+TESTES UNITARIOS EMAIL : 
+
+testEmailConstructor: Verifica se o construtor parametrizado define corretamente todos os campos.
+
+testSettersAndGetters: Verifica se os métodos setters e getters funcionam corretamente para todos os campos.
+
+testDefaultConstructor: Verifica se o construtor padrão inicializa os campos como null.
+
+TESTES UNITARIOS EMAIL AWS DTO:
+
+testEmailAwsDTOConstructor:
+
+Verifica se o construtor parametrizado define corretamente todos os campos.
+Usa o construtor da classe EmailAwsDTO para criar um objeto e, em seguida, verifica se os valores dos campos estão corretos usando os métodos getters.
+
+testSettersAndGetters:
+
+Cria um objeto EmailAwsDTO com valores iniciais vazios.
+Usa os métodos setters para definir novos valores para os campos e, em seguida, verifica se os valores foram corretamente atribuídos usando os métodos getters.
+
+TESTES UNITARIOS EMAIL OCI DTO:
+
+testEmailOciDTOConstructor:
+
+Verifica se o construtor parametrizado define corretamente todos os campos.
+Usa o construtor da classe EmailOciDTO para criar um objeto e, em seguida, verifica se os valores dos campos estão corretos usando os métodos getters.
+
+testSettersAndGetters:
+
+Cria um objeto EmailOciDTO com valores iniciais vazios.
+Usa os métodos setters para definir novos valores para os campos e, em seguida, verifica se os valores foram corretamente atribuídos usando os métodos getters.
+
+TESTES UNITARIOS EMAIL RESOURCE:
+
+testFind:
+
+Verifica se o endpoint /emails/{codigo} retorna um email corretamente quando o email é encontrado.
+
+testFindNotFound:
+
+Verifica se o endpoint /emails/{codigo} retorna um erro 400 quando o email não é encontrado.
+
+testFindAll:
+
+Verifica se o endpoint /emails retorna todos os emails corretamente.
+
+testInsert:
+
+Verifica se o endpoint POST /emails insere um novo email corretamente e retorna o status 201.
+
+testInsertAws:
+
+Verifica se o endpoint POST /emails/salvar-aws insere um novo email corretamente e retorna o status 201.
+
+testInsertOci:
+
+Verifica se o endpoint POST /emails/salvar-oci insere um novo email corretamente e retorna o status 201.
+
+
+TESTES UNITARIOS EMAIL SERVICE :
+
+testFind:
+
+Verifica se o método find retorna um email corretamente quando o email é encontrado no repositório.
+
+testFindNotFound:
+
+Verifica se o método find lança uma exceção ObjectNotFoundException quando o email não é encontrado no repositório.
+
+testFindAll:
+
+Verifica se o método findAll retorna todos os emails corretamente.
+
+testInsertEmailDTO:
+
+Verifica se o método insert com um EmailDTO insere um novo email corretamente e retorna o email salvo.
+
+testInsertEmailAwsDTO:
+
+Verifica se o método insert com um EmailAwsDTO insere um novo email corretamente e retorna o email salvo.
+
+testInsertEmailOciDTO:
+
+Verifica se o método insert com um EmailOciDTO insere um novo email corretamente e retorna o email salvo.
